@@ -154,9 +154,9 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect }) => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 h-full flex flex-col">
       <div
-        className={`border-2 border-dashed rounded-xl p-6 text-center transition-all duration-300 ${
+        className={`border-2 border-dashed rounded-xl p-6 text-center transition-all duration-300 flex-1 flex flex-col justify-center ${
           dragActive ? 'dark:border-sunglo-400 border-sunglo-400 dark:bg-sunglo-900/50 bg-sunglo-50' : 'dark:border-sunglo-700 border-sunglo-300 dark:bg-sunglo-800/50 bg-sunglo-100/50'
         } shadow-md hover:shadow-lg`}
         onDragEnter={handleDrag}

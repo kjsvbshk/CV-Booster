@@ -85,23 +85,23 @@ const JobOffer: React.FC<JobOfferProps> = ({ onContentChange }) => {
   return (
     <motion.div
       layout
-      className={`relative rounded-xl p-4 border-2 transition-all duration-300 shadow-md ${
+      className={`relative rounded-xl p-4 border-2 transition-all duration-300 shadow-md h-full flex flex-col ${
         isFocused ? 'dark:border-sunglo-400 border-sunglo-400 ring-2 dark:ring-sunglo-800/50 ring-sunglo-200/50' : 'dark:border-sunglo-700 border-sunglo-300'
-      } dark:bg-sunglo-800 bg-sunglo-50 min-h-[200px] max-h-[500px] overflow-y-auto hover:shadow-lg`}
+      } dark:bg-sunglo-800 bg-sunglo-50 hover:shadow-lg`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       whileHover={{ y: -2 }}
     >
-      <textarea
-        value={value}
-        onChange={handleChange}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        onPaste={handlePaste}
-        placeholder="Pega aquí la oferta de trabajo (mantiene formato básico al pegar)"
-        className="w-full h-full min-h-[150px] p-0 border-none outline-none resize-none dark:text-sunglo-200 text-sunglo-800 dark:bg-transparent bg-transparent leading-relaxed"
-      />
+        <textarea
+          value={value}
+          onChange={handleChange}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          onPaste={handlePaste}
+          placeholder="Pega aquí la oferta de trabajo (mantiene formato básico al pegar)"
+          className="w-full flex-1 p-0 border-none bg-transparent text-sunglo-800 dark:text-sunglo-100 placeholder-sunglo-400 dark:placeholder-sunglo-400 focus:outline-none resize-none"
+        />
       <p className="absolute bottom-2 right-2 text-xs dark:text-sunglo-400 text-sunglo-500 pointer-events-none">
         Conserva formato al pegar
       </p>

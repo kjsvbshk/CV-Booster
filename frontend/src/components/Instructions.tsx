@@ -27,7 +27,7 @@ const Instructions: React.FC<InstructionsProps> = ({ onInstructionsChange }) => 
         onChange={handleChange}
         rows={4}
         placeholder="Escribe consejos, preferencias o instrucciones extra para la transformación..."
-        className="w-full p-4 border dark:border-sunglo-700 border-sunglo-300 rounded-xl focus:outline-none focus:ring-2 dark:focus:ring-sunglo-800 focus:ring-sunglo-200 focus:dark:border-sunglo-500 focus:border-sunglo-400 transition-all duration-300 shadow-sm resize-none dark:text-sunglo-200 text-sunglo-800 dark:bg-sunglo-800 bg-sunglo-50 hover:shadow-md max-h-[200px]"
+        className="w-full p-4 border-2 border-sunglo-200 dark:border-sunglo-600 rounded-xl bg-white dark:bg-sunglo-800 text-sunglo-800 dark:text-sunglo-100 placeholder-sunglo-400 dark:placeholder-sunglo-400 focus:border-sunglo-400 dark:focus:border-sunglo-400 focus:outline-none transition-colors duration-200 resize-none"
       />
     </motion.div>
   );
