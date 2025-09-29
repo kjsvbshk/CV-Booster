@@ -7,6 +7,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import logo from '../assets/logo.svg';
 
 const LoginPage: React.FC = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -148,19 +149,28 @@ const LoginPage: React.FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-sunglo-700 dark:text-sunglo-300 mb-2">Contraseña</label>
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  placeholder="********"
-                  className={`w-full p-4 border-2 rounded-xl bg-white dark:bg-sunglo-700 text-sunglo-800 dark:text-sunglo-100 placeholder-sunglo-400 dark:placeholder-sunglo-400 focus:outline-none transition-colors duration-200 ${
-                    errors.password
-                      ? 'border-red-400 dark:border-red-600'
-                      : 'border-sunglo-200 dark:border-sunglo-600 focus:border-sunglo-400 dark:focus:border-sunglo-400'
-                  }`}
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    placeholder="********"
+                    className={`w-full p-4 pr-12 border-2 rounded-xl bg-white dark:bg-sunglo-700 text-sunglo-800 dark:text-sunglo-100 placeholder-sunglo-400 dark:placeholder-sunglo-400 focus:outline-none transition-colors duration-200 ${
+                      errors.password
+                        ? 'border-red-400 dark:border-red-600'
+                        : 'border-sunglo-200 dark:border-sunglo-600 focus:border-sunglo-400 dark:focus:border-sunglo-400'
+                    }`}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sunglo-400 hover:text-sunglo-600 dark:text-sunglo-500 dark:hover:text-sunglo-300 transition-colors duration-200"
+                  >
+                    {showPassword ? '👁️' : '👁️‍🗨️'}
+                  </button>
+                </div>
                 {errors.password && (
                   <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.password}</p>
                 )}
