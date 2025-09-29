@@ -22,7 +22,6 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect }) => {
   const [dragActive, setDragActive] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [preview, setPreview] = useState<Preview | null>(null);
-  const [file, setFile] = useState<File | null>(null);
 
   const isValidMarkdown = (content: string): boolean => {
     return content.trim().startsWith('#') || content.includes('##') || content.includes('') || content.includes('>') || content.length > 10;
@@ -44,7 +43,10 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect }) => {
           for (let i = 1; i <= pdf.numPages; i++) {
             const page = await pdf.getPage(i);
             const textContent = await page.getTextContent();
-            const pageText = textContent.items.map(item => item.str).join(' ');
+            const pageText = textContent.items
+              .filter(item => 'str' in item)
+              .map(item => (item as any).str)
+              .join(' ');
             fullText += pageText + '\n\n';
           }
           resolve(fullText.trim());
@@ -107,7 +109,6 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect }) => {
       setError('');
       const validation = await validateFile(selectedFile);
       if (validation.valid) {
-        setFile(selectedFile);
         setError('');
         let textPreview = 'Contenido no disponible para vista previa.';
         if (validation.text && typeof validation.text === 'string') {
@@ -119,7 +120,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect }) => {
           type: selectedFile.name.endsWith('.md') ? 'Markdown' : 'PDF',
           content: textPreview
         });
-        const fileData: FileWithText = Object.create(selectedFile);
+        const fileData: FileWithText = selectedFile as FileWithText;
         if (validation.text && typeof validation.text === 'string') {
           fileData.extractedText = validation.text;
         }
@@ -127,7 +128,6 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect }) => {
       } else {
         setError(validation.error || '');
         setPreview(null);
-        setFile(null);
       }
     }
   };
@@ -148,7 +148,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect }) => {
     setDragActive(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const dropFile = e.dataTransfer.files[0];
-      const fileEvent = { target: { files: [dropFile] } } as React.ChangeEvent<HTMLInputElement>;
+      const fileEvent = { target: { files: [dropFile] } } as unknown as React.ChangeEvent<HTMLInputElement>;
       handleFile(fileEvent);
     }
   };
@@ -179,7 +179,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect }) => {
             📁
           </div>
           <p className="font-medium">Arrastra o elige un archivo</p>
-          <p className="text-sm dark:text-sunglo-400 text-sunglo-600">Solo PDF y Markdown 😏</p>
+          <p className="text-sm dark:text-sunglo-400 text-sunglo-600">Solo PDF y Markdown</p>
         </label>
       </div>
       {error && (
