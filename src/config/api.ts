@@ -28,10 +28,6 @@ export const isDevelopment = import.meta.env.DEV;
 
 // Función para obtener la URL base según el entorno
 export const getApiBaseUrl = (): string => {
-  if (isDevelopment) {
-    return API_CONFIG.BASE_URL;
-  }
-  
-  // En producción, usar la URL del backend real
-  return import.meta.env.VITE_API_BASE_URL || 'https://cv-booster-backend.onrender.com';
+  // Siempre usar el proxy local para evitar problemas de CORS
+  return import.meta.env.VITE_API_BASE_URL || '/api';
 };

@@ -23,7 +23,7 @@ class ApiService {
 
   constructor() {
     this.axiosInstance = axios.create({
-      baseURL: API_CONFIG.BASE_URL,
+      baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
       timeout: API_CONFIG.AXIOS_CONFIG.timeout,
       withCredentials: API_CONFIG.AXIOS_CONFIG.withCredentials,
       validateStatus: API_CONFIG.AXIOS_CONFIG.validateStatus,
