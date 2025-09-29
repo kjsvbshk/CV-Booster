@@ -1,11 +1,13 @@
 import React, { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
+import { LogOut, User } from 'lucide-react';
 import FileUpload from '../components/FileUpload';
 import JobOffer from '../components/JobOffer';
 import Instructions from '../components/Instructions';
 import TransformButton from '../components/TransformButton';
 import Result from '../components/Result';
 import DarkModeToggle from '../components/DarkModeToggle';
+import { useAuth } from '../contexts/AuthContext';
 import { apiService } from '../services/api';
 import type { 
   ApiError, 
@@ -21,6 +23,7 @@ interface FileWithText extends File {
 }
 
 const AppPage: React.FC = () => {
+  const { user, logout } = useAuth();
   const [selectedFile, setSelectedFile] = useState<FileWithText | null>(null);
   const [jobContent, setJobContent] = useState<string>('');
   const [instructions, setInstructions] = useState<string>('');
@@ -51,6 +54,14 @@ const AppPage: React.FC = () => {
 
   const handleInstructionsChange = (text: string): void => {
     setInstructions(text);
+  };
+
+  const handleLogout = async (): Promise<void> => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
   };
 
   const handleConfirmAndGenerate = useCallback(async (): Promise<void> => {
@@ -154,7 +165,7 @@ const AppPage: React.FC = () => {
     >
       <div className="container-responsive">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
           <motion.div 
             className="flex items-center space-x-3"
             initial={{ scale: 0.9, opacity: 0 }}
@@ -166,7 +177,22 @@ const AppPage: React.FC = () => {
               CV Booster
             </h1>
           </motion.div>
-          <DarkModeToggle />
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 text-sunglo-600 dark:text-sunglo-300">
+              <User className="w-4 h-4" />
+              <span className="text-sm">{user?.email}</span>
+            </div>
+            <DarkModeToggle />
+            <motion.button
+              onClick={handleLogout}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 px-4 py-2 text-sunglo-600 dark:text-sunglo-300 hover:text-sunglo-800 dark:hover:text-sunglo-100 hover:bg-sunglo-100 dark:hover:bg-sunglo-700 rounded-lg transition-colors duration-200"
+            >
+              <LogOut className="w-4 h-4" />
+              <span className="text-sm">Cerrar Sesión</span>
+            </motion.button>
+          </div>
         </div>
         
         {/* Main Content Grid */}

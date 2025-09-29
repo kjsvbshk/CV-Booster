@@ -1,15 +1,18 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, FileText, Brain, Users } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { ArrowRight, FileText, Brain, Users, LogIn, UserPlus } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import logo from '../assets/logo.svg';
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
-  const handleGoToLogin = () => {
-    navigate('/login');
+  const handleGoToApp = () => {
+    navigate('/app');
   };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br dark:from-sunglo-900 from-sunglo-50 via-sunglo-100 to-sunglo-200 dark:via-sunglo-800 dark:to-sunglo-700">
@@ -68,15 +71,36 @@ const HomePage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.8 }}
           >
-            <motion.button
-              onClick={handleGoToLogin}
-              className="px-8 py-4 bg-sunglo-500 hover:bg-sunglo-600 text-white font-semibold rounded-xl flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all duration-300"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <span>Comenzar ahora</span>
-              <ArrowRight className="w-5 h-5" />
-            </motion.button>
+            {isAuthenticated ? (
+              <motion.button
+                onClick={handleGoToApp}
+                className="px-8 py-4 bg-sunglo-500 hover:bg-sunglo-600 text-white font-semibold rounded-xl flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <FileText className="w-5 h-5" />
+                <span>Ir a mi Dashboard</span>
+                <ArrowRight className="w-5 h-5" />
+              </motion.button>
+            ) : (
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  to="/register"
+                  className="px-8 py-4 bg-sunglo-500 hover:bg-sunglo-600 text-white font-semibold rounded-xl flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  <UserPlus className="w-5 h-5" />
+                  <span>Registrarse gratis</span>
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+                <Link
+                  to="/login"
+                  className="px-8 py-4 bg-white dark:bg-sunglo-700 text-sunglo-600 dark:text-sunglo-300 font-semibold rounded-xl flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-sunglo-200 dark:border-sunglo-600"
+                >
+                  <LogIn className="w-5 h-5" />
+                  <span>Iniciar Sesión</span>
+                </Link>
+              </div>
+            )}
 
             <button className="px-8 py-4 bg-white dark:bg-sunglo-800 text-sunglo-600 dark:text-sunglo-300 font-semibold rounded-xl border-2 border-sunglo-200 dark:border-sunglo-600 hover:border-sunglo-400 dark:hover:border-sunglo-400 transition-all duration-300">
               Ver demo
@@ -171,15 +195,36 @@ const HomePage: React.FC = () => {
             Únete a miles de profesionales que ya están usando CV-Booster para destacar en el mercado laboral.
           </motion.p>
 
-          <motion.button
-            onClick={handleGoToLogin}
-            className="px-8 py-4 bg-sunglo-500 hover:bg-sunglo-600 text-white font-semibold rounded-xl flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all duration-300 mx-auto"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <span>Comenzar gratis</span>
-            <ArrowRight className="w-5 h-5" />
-          </motion.button>
+          {isAuthenticated ? (
+            <motion.button
+              onClick={handleGoToApp}
+              className="px-8 py-4 bg-sunglo-500 hover:bg-sunglo-600 text-white font-semibold rounded-xl flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all duration-300 mx-auto"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <FileText className="w-5 h-5" />
+              <span>Ir a mi Dashboard</span>
+              <ArrowRight className="w-5 h-5" />
+            </motion.button>
+          ) : (
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/register"
+                className="px-8 py-4 bg-sunglo-500 hover:bg-sunglo-600 text-white font-semibold rounded-xl flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <UserPlus className="w-5 h-5" />
+                <span>Registrarse gratis</span>
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link
+                to="/login"
+                className="px-8 py-4 bg-white dark:bg-sunglo-700 text-sunglo-600 dark:text-sunglo-300 font-semibold rounded-xl flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-sunglo-200 dark:border-sunglo-600"
+              >
+                <LogIn className="w-5 h-5" />
+                <span>Iniciar Sesión</span>
+              </Link>
+            </div>
+          )}
         </div>
       </motion.section>
 

@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import type { AxiosInstance, AxiosResponse } from 'axios';
+import { CookieManager } from '../utils/cookies';
 import type { 
   TransformRequest, 
   TransformResponse, 
@@ -8,7 +9,12 @@ import type {
   AnalyzeJobRequest,
   AnalyzeJobResponse,
   GenerateCVRequest,
-  GenerateCVResponse
+  GenerateCVResponse,
+  LoginRequest,
+  RegisterRequest,
+  AuthResponse,
+  RegisterResponse,
+  User
 } from '../types/api';
 import { API_CONFIG } from '../config/api';
 
@@ -27,6 +33,11 @@ class ApiService {
     // Interceptor para requests
     this.axiosInstance.interceptors.request.use(
       (config) => {
+        // Agregar token de autenticación si está disponible en cookies
+        const token = CookieManager.getAccessToken();
+        if (token && CookieManager.hasValidToken()) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
         return config;
       },
       (error) => {
@@ -40,9 +51,34 @@ class ApiService {
         return response;
       },
       (error: AxiosError) => {
+        // Manejar errores de autenticación
+        if (error.response?.status === 401) {
+          // Limpiar cookies y redirigir al login
+          CookieManager.clearAuth();
+          this.clearAuthToken();
+          
+          // Solo redirigir si no estamos ya en la página de login
+          if (window.location.pathname !== '/login' && window.location.pathname !== '/register') {
+            window.location.href = '/login';
+          }
+        }
         return Promise.reject(this.handleAxiosError(error));
       }
     );
+  }
+
+  /**
+   * Configura el token de autenticación en las peticiones
+   */
+  setAuthToken(token: string): void {
+    this.axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  }
+
+  /**
+   * Limpia el token de autenticación
+   */
+  clearAuthToken(): void {
+    delete this.axiosInstance.defaults.headers.common['Authorization'];
   }
 
   private handleAxiosError(error: AxiosError): ApiError {
@@ -254,6 +290,56 @@ class ApiService {
     } catch (error) {
       console.error('Servidor no disponible:', error);
       return false;
+    }
+  }
+
+  // ==================== MÉTODOS DE AUTENTICACIÓN ====================
+
+  /**
+   * Inicia sesión con email y contraseña
+   */
+  async login(data: LoginRequest): Promise<AuthResponse> {
+    try {
+      const response = await this.axiosInstance.post<AuthResponse>('/auth/login-user', data);
+      return response.data;
+    } catch (error: any) {
+      throw this.handleAxiosError(error);
+    }
+  }
+
+  /**
+   * Registra un nuevo usuario
+   */
+  async register(data: RegisterRequest): Promise<RegisterResponse> {
+    try {
+      const response = await this.axiosInstance.post<RegisterResponse>('/auth/register-user', data);
+      return response.data;
+    } catch (error: any) {
+      throw this.handleAxiosError(error);
+    }
+  }
+
+  /**
+   * Cierra la sesión del usuario
+   */
+  async logout(): Promise<{ ok: boolean; message: string }> {
+    try {
+      const response = await this.axiosInstance.post('/auth/logout-user');
+      return response.data;
+    } catch (error: any) {
+      throw this.handleAxiosError(error);
+    }
+  }
+
+  /**
+   * Obtiene la información del usuario actual
+   */
+  async getCurrentUser(): Promise<User> {
+    try {
+      const response = await this.axiosInstance.get<User>('/auth/me');
+      return response.data;
+    } catch (error: any) {
+      throw this.handleAxiosError(error);
     }
   }
 }

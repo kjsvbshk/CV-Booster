@@ -33,5 +33,5 @@ export const getApiBaseUrl = (): string => {
   }
   
   // En producción, usar la URL del backend real
-  return import.meta.env.VITE_API_BASE_URL || 'https://tu-backend-produccion.com/api';
+  return import.meta.env.VITE_API_BASE_URL || 'https://cv-booster-backend.onrender.com';
 };

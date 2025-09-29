@@ -1,119 +1,146 @@
-# CV-Booster
+# CV-Booster Frontend
 
-Sistema inteligente para transformar ofertas de trabajo utilizando IA, desarrollado con React, TypeScript, FastAPI y bases de datos.
+Aplicación frontend para CV-Booster, una herramienta de optimización de CVs usando IA.
 
-## 🚀 Características Principales
+## 🚀 Características
 
-- **Transformación inteligente** de ofertas de trabajo con IA
-- **Subida de archivos** PDF y Markdown con drag & drop
-- **Análisis automático** de compatibilidad CV-Oferta
-- **Modo oscuro/claro** con persistencia
-- **Diseño responsivo** y moderno
-- **Autenticación JWT** segura
-- **API REST** con FastAPI
-- **Base de datos** PostgreSQL/SQLite
-
-## 🏗️ Arquitectura del Proyecto
-
-```
-CV-Booster/
-├── frontend/              # Aplicación React (Frontend)
-│   ├── src/
-│   │   ├── components/    # Componentes React
-│   │   ├── context/       # Contextos de React
-│   │   ├── services/      # Servicios de API
-│   │   └── types/         # Tipos de TypeScript
-│   └── package.json
-├── backend/               # API FastAPI (Backend) - Próximamente
-│   ├── app/
-│   │   ├── models/        # Modelos de base de datos
-│   │   ├── routes/        # Endpoints de la API
-│   │   └── services/      # Lógica de negocio
-│   └── requirements.txt
-└── README.md
-```
+- **Autenticación completa** con JWT y cookies seguras
+- **Optimización de CVs** con análisis de ofertas de trabajo
+- **Interfaz moderna** con Tailwind CSS y Framer Motion
+- **Responsive design** para todos los dispositivos
+- **Modo oscuro** integrado
+- **Protección de rutas** automática
 
 ## 🛠️ Tecnologías
 
-### Frontend
 - **React 19** con TypeScript
-- **Vite** para desarrollo rápido
+- **Vite** como bundler
 - **Tailwind CSS** para estilos
 - **Framer Motion** para animaciones
-- **PDF.js** para procesamiento de PDFs
+- **React Router** para navegación
+- **Axios** para peticiones HTTP
+- **js-cookie** para gestión de cookies
 
-### Backend (Próximamente)
-- **FastAPI** para la API REST
-- **PostgreSQL/SQLite** para base de datos
-- **JWT** para autenticación
-- **Pydantic** para validación de datos
+## 📦 Instalación
 
-### IA/ML
-- **OpenAI API** para análisis de texto
-- **Hugging Face** para procesamiento de lenguaje natural
-- **Análisis de sentimientos** en ofertas de trabajo
-
-## 🚀 Instalación y Desarrollo
-
-### Frontend
 ```bash
 # Instalar dependencias
-npm run install:frontend
+npm install
 
-# Desarrollo
+# Ejecutar en desarrollo
 npm run dev
 
-# Build
+# Construir para producción
 npm run build
+
+# Previsualizar build de producción
+npm run preview
 ```
 
-### Backend (Próximamente)
-```bash
-cd backend
-pip install -r requirements.txt
-uvicorn app.main:app --reload
+## 🔧 Scripts Disponibles
+
+- `npm run dev` - Servidor de desarrollo
+- `npm run build` - Construcción para producción
+- `npm run preview` - Previsualizar build
+- `npm run lint` - Verificar código con ESLint
+- `npm run lint:fix` - Corregir errores de ESLint
+- `npm run type-check` - Verificar tipos TypeScript
+- `npm run clean` - Limpiar directorio dist
+
+## 🌐 Variables de Entorno
+
+Crea un archivo `.env.local` basado en `env.example`:
+
+```env
+VITE_API_BASE_URL=https://cv-booster-backend.onrender.com
+VITE_NODE_ENV=production
 ```
 
-## 📋 Requisitos del Proyecto
+## 🚀 Despliegue en Vercel
 
-- ✅ **Frontend responsivo** con excelente UX/UI
-- 🔄 **Endpoints CRUD** en FastAPI (en desarrollo)
-- 🔄 **Autenticación JWT** (en desarrollo)
-- 🔄 **Integración con IA** (en desarrollo)
-- 🔄 **Despliegue en producción** (en desarrollo)
+1. Conecta tu repositorio a Vercel
+2. Configura las variables de entorno en el dashboard de Vercel
+3. El build se ejecutará automáticamente
 
-## 🎯 Funcionalidades Implementadas
+### Variables de Entorno en Vercel
 
-### Frontend
-- ✅ Subida de archivos PDF y Markdown
-- ✅ Editor de ofertas de trabajo
-- ✅ Modo oscuro/claro
-- ✅ Animaciones fluidas
-- ✅ Diseño responsivo
-- ✅ Validación de formularios
+- `VITE_API_BASE_URL`: URL base de la API (`https://cv-booster-backend.onrender.com`)
+- `VITE_NODE_ENV`: Entorno de ejecución (`production`)
 
-### Próximas Funcionalidades
-- 🔄 Sistema de autenticación
-- 🔄 Dashboard de usuario
-- 🔄 Historial de transformaciones
-- 🔄 Análisis con IA
-- 🔄 API REST completa
+## 📁 Estructura del Proyecto
 
-## 📝 Scripts Disponibles
+```
+src/
+├── components/          # Componentes reutilizables
+│   ├── auth/           # Componentes de autenticación
+│   ├── DarkModeToggle.tsx
+│   ├── FileUpload.tsx
+│   ├── Instructions.tsx
+│   ├── JobOffer.tsx
+│   ├── ProtectedRoute.tsx
+│   ├── Result.tsx
+│   └── TransformButton.tsx
+├── contexts/           # Contextos de React
+│   └── AuthContext.tsx
+├── hooks/             # Hooks personalizados
+│   └── useAuthCheck.ts
+├── pages/             # Páginas de la aplicación
+│   ├── AppPage.tsx
+│   ├── HomePage.tsx
+│   ├── LoginPage.tsx
+│   └── RegisterPage.tsx
+├── services/          # Servicios de API
+│   └── api.ts
+├── types/             # Tipos TypeScript
+│   └── api.ts
+├── utils/             # Utilidades
+│   └── cookies.ts
+├── config/            # Configuraciones
+│   └── api.ts
+├── App.tsx            # Componente principal
+├── main.tsx           # Punto de entrada
+└── index.css          # Estilos globales
+```
 
-- `npm run dev` - Servidor de desarrollo del frontend
-- `npm run build` - Build de producción
-- `npm run install:frontend` - Instalar dependencias del frontend
-- `npm run lint` - Linting del código
+## 🔐 Autenticación
 
-## 🤝 Contribución
+La aplicación usa un sistema de autenticación basado en JWT con cookies seguras:
 
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+- **Login/Registro** con validación de formularios
+- **Protección de rutas** automática
+- **Persistencia de sesión** con cookies
+- **Logout** con limpieza de estado
+
+## 🎨 Estilos
+
+- **Tailwind CSS** para estilos utilitarios
+- **Modo oscuro** con `dark:` prefix
+- **Responsive design** con breakpoints
+- **Animaciones** con Framer Motion
+
+## 📱 Responsive Design
+
+- **Mobile First** approach
+- **Breakpoints**: sm, md, lg, xl
+- **Componentes adaptativos** para todos los tamaños
+
+## 🚀 Optimizaciones de Producción
+
+- **Code splitting** automático
+- **Minificación** con Terser
+- **Tree shaking** para eliminar código no usado
+- **Chunks manuales** para mejor caching
+- **Source maps** deshabilitados en producción
+
+## 🔧 Configuración de Vercel
+
+El proyecto incluye configuración específica para Vercel:
+
+- `vercel.json` - Configuración de despliegue
+- `.vercelignore` - Archivos a ignorar
+- **Build command**: `npm run build`
+- **Output directory**: `dist`
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
+Este proyecto es privado y confidencial.

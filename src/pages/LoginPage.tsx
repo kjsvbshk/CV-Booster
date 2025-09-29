@@ -1,15 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Mail, Lock, ArrowRight } from 'lucide-react';
+import { ArrowRight, AlertCircle } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
+import { useAuthCheck } from '../hooks/useAuthCheck';
+import { useNavigate, Link } from 'react-router-dom';
 import logo from '../assets/logo.svg';
 
 const LoginPage: React.FC = () => {
-  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     remember: false
   });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { login } = useAuth();
+  const { redirectIfAuthenticated } = useAuthCheck();
+  const navigate = useNavigate();
+
+  // Redirigir si ya está autenticado
+  useEffect(() => {
+    redirectIfAuthenticated();
+  }, [redirectIfAuthenticated]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -17,12 +30,61 @@ const LoginPage: React.FC = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+    
+    // Limpiar error del campo cuando el usuario empiece a escribir
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.email) {
+      newErrors.email = 'El correo electrónico es requerido';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'El correo electrónico no es válido';
+    }
+
+    if (!formData.password) {
+      newErrors.password = 'La contraseña es requerida';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login data:', formData);
-    // Aquí implementaremos la lógica de login
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await login({
+        email: formData.email,
+        password: formData.password
+      });
+      
+      // Redirigir al dashboard después del login exitoso
+      navigate('/app');
+    } catch (error: any) {
+      console.error('Error en el login:', error);
+      
+      // Manejar errores específicos del servidor
+      if (error.message?.includes('Invalid credentials')) {
+        setErrors({ general: 'Credenciales inválidas. Verifica tu email y contraseña.' });
+      } else {
+        setErrors({ general: error.message || 'Error al iniciar sesión. Inténtalo de nuevo.' });
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleGoogleLogin = (e: React.FormEvent) => {
@@ -51,6 +113,17 @@ const LoginPage: React.FC = () => {
                 <h1 className="text-3xl font-bold text-sunglo-800 dark:text-sunglo-100 mb-2">¡Bienvenido de nuevo!</h1>
                 <p className="text-sunglo-600 dark:text-sunglo-300">Por favor, ingresa tus datos.</p>
               </div>
+
+              {errors.general && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-4 bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-200 rounded-lg flex items-center space-x-2"
+                >
+                  <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                  <span>{errors.general}</span>
+                </motion.div>
+              )}
             
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
@@ -61,9 +134,16 @@ const LoginPage: React.FC = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="Ingresa tu correo"
-                  className="w-full p-4 border-2 border-sunglo-200 dark:border-sunglo-600 rounded-xl bg-white dark:bg-sunglo-700 text-sunglo-800 dark:text-sunglo-100 placeholder-sunglo-400 dark:placeholder-sunglo-400 focus:border-sunglo-400 dark:focus:border-sunglo-400 focus:outline-none transition-colors duration-200"
+                  className={`w-full p-4 border-2 rounded-xl bg-white dark:bg-sunglo-700 text-sunglo-800 dark:text-sunglo-100 placeholder-sunglo-400 dark:placeholder-sunglo-400 focus:outline-none transition-colors duration-200 ${
+                    errors.email
+                      ? 'border-red-400 dark:border-red-600'
+                      : 'border-sunglo-200 dark:border-sunglo-600 focus:border-sunglo-400 dark:focus:border-sunglo-400'
+                  }`}
                   required
                 />
+                {errors.email && (
+                  <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.email}</p>
+                )}
               </div>
 
               <div>
@@ -74,9 +154,16 @@ const LoginPage: React.FC = () => {
                   value={formData.password}
                   onChange={handleInputChange}
                   placeholder="********"
-                  className="w-full p-4 border-2 border-sunglo-200 dark:border-sunglo-600 rounded-xl bg-white dark:bg-sunglo-700 text-sunglo-800 dark:text-sunglo-100 placeholder-sunglo-400 dark:placeholder-sunglo-400 focus:border-sunglo-400 dark:focus:border-sunglo-400 focus:outline-none transition-colors duration-200"
+                  className={`w-full p-4 border-2 rounded-xl bg-white dark:bg-sunglo-700 text-sunglo-800 dark:text-sunglo-100 placeholder-sunglo-400 dark:placeholder-sunglo-400 focus:outline-none transition-colors duration-200 ${
+                    errors.password
+                      ? 'border-red-400 dark:border-red-600'
+                      : 'border-sunglo-200 dark:border-sunglo-600 focus:border-sunglo-400 dark:focus:border-sunglo-400'
+                  }`}
                   required
                 />
+                {errors.password && (
+                  <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.password}</p>
+                )}
               </div>
 
               <div className="flex items-center justify-between">
@@ -94,9 +181,29 @@ const LoginPage: React.FC = () => {
                 <a href="#" className="text-sm text-sunglo-500 dark:text-sunglo-400 hover:text-sunglo-700 dark:hover:text-sunglo-300">¿Olvidaste tu contraseña?</a>
               </div>
 
-              <button type="submit" className="w-full py-4 bg-sunglo-500 hover:bg-sunglo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                Iniciar sesión
-              </button>
+              <motion.button
+                type="submit"
+                disabled={isLoading}
+                whileHover={{ scale: isLoading ? 1 : 1.02 }}
+                whileTap={{ scale: isLoading ? 1 : 0.98 }}
+                className={`w-full py-4 font-semibold rounded-xl shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 ${
+                  isLoading
+                    ? 'bg-sunglo-300 dark:bg-sunglo-600 text-sunglo-500 dark:text-sunglo-400 cursor-not-allowed'
+                    : 'bg-sunglo-500 hover:bg-sunglo-600 text-white hover:shadow-xl'
+                }`}
+              >
+                {isLoading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    <span>Iniciando sesión...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Iniciar sesión</span>
+                    <ArrowRight className="w-5 h-5" />
+                  </>
+                )}
+              </motion.button>
             </form>
             
             <form onSubmit={handleGoogleLogin} className="mt-6">
@@ -107,7 +214,13 @@ const LoginPage: React.FC = () => {
             </form>
 
             <div className="text-center text-sunglo-600 dark:text-sunglo-300">
-              ¿No tienes una cuenta? <a href="#" className="text-sunglo-500 dark:text-sunglo-400 hover:text-sunglo-700 dark:hover:text-sunglo-300 font-semibold">Regístrate gratis</a>
+              ¿No tienes una cuenta?{' '}
+              <Link
+                to="/register"
+                className="text-sunglo-500 dark:text-sunglo-400 hover:text-sunglo-700 dark:hover:text-sunglo-300 font-semibold"
+              >
+                Regístrate gratis
+              </Link>
             </div>
             </motion.div>
           </div>

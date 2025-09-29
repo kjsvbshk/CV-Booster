@@ -28,6 +28,36 @@ export interface GenerateCVResponse {
   obfuscation_mapping: Record<string, any>;
 }
 
+// Tipos para autenticación
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  email: string;
+  password: string;
+}
+
+export interface AuthResponse {
+  access_token: string;
+  token_type: string;
+}
+
+export interface RegisterResponse {
+  id: string;
+  email: string;
+}
+
+export interface User {
+  id: string;
+  email: string;
+  is_active: boolean;
+  is_email_confirmed: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
 // Tipos legacy para compatibilidad (deprecated)
 export interface TransformRequest {
   fileContent?: string;
