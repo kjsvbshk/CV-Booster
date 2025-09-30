@@ -27,6 +27,7 @@ export const API_CONFIG = {
 export const isDevelopment = import.meta.env.DEV;
 
 
+
 // Función para obtener la URL base según el entorno
 export const getApiBaseUrl = (): string => {
   // Siempre usar el proxy local para evitar problemas de CORS
