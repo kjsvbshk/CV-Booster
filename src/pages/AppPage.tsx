@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { LogOut, User, History, AlertCircle, BarChart3, Target, TrendingUp, Wrench, Key, Lightbulb, CheckCircle, RotateCcw, Eye, EyeOff } from 'lucide-react';
+import { LogOut, User, History, AlertCircle, BarChart3, Target, TrendingUp, Wrench, Key, Lightbulb, CheckCircle, RotateCcw } from 'lucide-react';
 import FileUpload from '../components/FileUpload';
 import JobOffer from '../components/JobOffer';
 import Instructions from '../components/Instructions';
