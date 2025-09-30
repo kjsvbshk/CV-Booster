@@ -16,14 +16,21 @@ const LoginPage: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const { redirectIfAuthenticated } = useAuthCheck();
   const navigate = useNavigate();
 
-  // Redirigir si ya está autenticado
+  // Redirigir si ya está autenticado (solo al cargar la página)
   useEffect(() => {
     redirectIfAuthenticated();
   }, [redirectIfAuthenticated]);
+
+  // Redirigir después de un login exitoso
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/app');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -72,8 +79,7 @@ const LoginPage: React.FC = () => {
         password: formData.password
       });
       
-      // Redirigir al dashboard después del login exitoso
-      navigate('/app');
+      // La redirección se maneja automáticamente en el useEffect
     } catch (error: any) {
       console.error('Error en el login:', error);
       

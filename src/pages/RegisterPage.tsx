@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Mail, Lock, ArrowRight, CheckCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useAuthCheck } from '../hooks/useAuthCheck';
 import { useNavigate, Link } from 'react-router-dom';
 import logo from '../assets/logo.svg';
 
@@ -18,7 +19,13 @@ const RegisterPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { register } = useAuth();
+  const { redirectIfAuthenticated } = useAuthCheck();
   const navigate = useNavigate();
+
+  // Redirigir si ya está autenticado
+  useEffect(() => {
+    redirectIfAuthenticated();
+  }, [redirectIfAuthenticated]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;

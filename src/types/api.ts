@@ -18,6 +18,7 @@ export interface GenerateCVRequest {
   job_id: string;
   cv: File; // Archivo CV es obligatorio, no puede ser null o undefined
   confirm_keywords?: string;
+  options?: string; // Instrucciones adicionales
 }
 
 // Response de la generación de CV
@@ -95,4 +96,39 @@ export interface ApiConfig {
   timeout: number;
   retryAttempts: number;
   pollingInterval: number;
+}
+
+// Tipos para el historial de uso
+export interface UsageHistoryItem {
+  id: number;
+  request_id: string;
+  model: string;
+  endpoint: string;
+  latency_ms: number;
+  result: string;
+  result_length: number;
+  created_at: string;
+}
+
+export interface UsageHistoryPagination {
+  total_records: number;
+  returned_records: number;
+  limit: number;
+  offset: number;
+  has_more: boolean;
+}
+
+export interface UsageHistoryFilters {
+  endpoint_filter: string | null;
+  model_filter: string | null;
+  include_full_result: boolean;
+}
+
+export interface UsageHistoryResponse {
+  success: boolean;
+  data: {
+    history: UsageHistoryItem[];
+    pagination: UsageHistoryPagination;
+    filters_applied: UsageHistoryFilters;
+  };
 }

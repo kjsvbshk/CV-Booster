@@ -25,7 +25,7 @@ const TransformButton: React.FC<TransformButtonProps> = ({ onTransform, isLoadin
             : 'bg-sunglo-500 hover:bg-sunglo-600 text-white active:shadow-md'
         }`}
       >
-        {isLoading ? 'Transformando...' : '🔮 Transformar'}
+        {isLoading ? 'Transformando...' : 'Transformar'}
       </motion.button>
     </motion.div>
   );

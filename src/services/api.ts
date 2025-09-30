@@ -14,7 +14,8 @@ import type {
   RegisterRequest,
   AuthResponse,
   RegisterResponse,
-  User
+  User,
+  UsageHistoryResponse
 } from '../types/api';
 import { API_CONFIG } from '../config/api';
 
@@ -180,6 +181,10 @@ class ApiService {
       formData.append('confirm_keywords', data.confirm_keywords);
     }
     
+    // Solo agregar options si tiene valor
+    if (data.options && data.options.trim() !== '') {
+      formData.append('options', data.options);
+    }
     
     try {
       const response = await this.axiosInstance.post<GenerateCVResponse>('/cv-boost/generate_cv/strict', formData, {
@@ -337,6 +342,18 @@ class ApiService {
   async getCurrentUser(): Promise<User> {
     try {
       const response = await this.axiosInstance.get<User>('/auth/me');
+      return response.data;
+    } catch (error: any) {
+      throw this.handleAxiosError(error);
+    }
+  }
+
+  /**
+   * Obtiene el historial de uso del usuario
+   */
+  async getUsageHistory(): Promise<UsageHistoryResponse> {
+    try {
+      const response = await this.axiosInstance.get<UsageHistoryResponse>('/cv-boost/usage_history');
       return response.data;
     } catch (error: any) {
       throw this.handleAxiosError(error);

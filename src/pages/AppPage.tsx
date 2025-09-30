@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { LogOut, User } from 'lucide-react';
+import { LogOut, User, History } from 'lucide-react';
 import FileUpload from '../components/FileUpload';
 import JobOffer from '../components/JobOffer';
 import Instructions from '../components/Instructions';
@@ -9,6 +9,7 @@ import Result from '../components/Result';
 import DarkModeToggle from '../components/DarkModeToggle';
 import { useAuth } from '../contexts/AuthContext';
 import { apiService } from '../services/api';
+import { useNavigate } from 'react-router-dom';
 import type { 
   ApiError, 
   AnalyzeJobRequest,
@@ -24,6 +25,7 @@ interface FileWithText extends File {
 
 const AppPage: React.FC = () => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState<FileWithText | null>(null);
   const [jobContent, setJobContent] = useState<string>('');
   const [instructions, setInstructions] = useState<string>('');
@@ -84,7 +86,8 @@ const AppPage: React.FC = () => {
       const generateData: GenerateCVRequest = {
         job_id: analysisResult.job_id,
         cv: selectedFile,
-        confirm_keywords: detectedKeywords && detectedKeywords.trim() !== '' ? detectedKeywords : undefined
+        confirm_keywords: detectedKeywords && detectedKeywords.trim() !== '' ? detectedKeywords : undefined,
+        options: instructions && instructions.trim() !== '' ? instructions : undefined
       };
 
       const cv = await apiService.generateCV(generateData);
@@ -182,6 +185,15 @@ const AppPage: React.FC = () => {
               <User className="w-4 h-4" />
               <span className="text-sm">{user?.email}</span>
             </div>
+            <motion.button
+              onClick={() => navigate('/history')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 px-4 py-2 text-sunglo-600 dark:text-sunglo-300 hover:text-sunglo-800 dark:hover:text-sunglo-100 hover:bg-sunglo-100 dark:hover:bg-sunglo-700 rounded-lg transition-colors duration-200"
+            >
+              <History className="w-4 h-4" />
+              <span className="text-sm">Historial</span>
+            </motion.button>
             <DarkModeToggle />
             <motion.button
               onClick={handleLogout}

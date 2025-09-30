@@ -84,8 +84,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Configurar token en axios
       apiService.setAuthToken(response.access_token);
       
-      // Cargar información del usuario
-      await refreshUser();
+      // Cargar información del usuario con un pequeño delay para asegurar que el token esté propagado
+      setTimeout(async () => {
+        try {
+          await refreshUser();
+        } catch (error) {
+          console.error('Error al cargar usuario después del login:', error);
+          // No lanzar el error aquí para no interrumpir el flujo de login
+        }
+      }, 100);
+      
     } catch (error) {
       throw error;
     } finally {
