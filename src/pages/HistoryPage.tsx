@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Clock, Database, Zap, FileText, Calendar, Hash, ExternalLink, X } from 'lucide-react';
+import { ArrowLeft, Clock, Database, Zap, FileText, Calendar, Hash, ExternalLink, X, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { apiService } from '../services/api';
 import type { UsageHistoryResponse, UsageHistoryItem } from '../types/api';
@@ -194,9 +194,12 @@ const HistoryPage: React.FC = () => {
             transition={{ duration: 0.5 }}
           >
             <div className="bg-red-100 dark:bg-red-900/20 border border-red-300 dark:border-red-700 rounded-xl p-4">
-              <p className="text-red-700 dark:text-red-300 font-medium">
-                ❌ Error: {error}
-              </p>
+              <div className="flex items-center space-x-2">
+                <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
+                <p className="text-red-700 dark:text-red-300 font-medium">
+                  Error: {error}
+                </p>
+              </div>
             </div>
           </motion.div>
         )}

@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { LogOut, User, History } from 'lucide-react';
+import { LogOut, User, History, AlertCircle, BarChart3, Target, TrendingUp, Wrench, Key, Lightbulb, CheckCircle, RotateCcw, Eye, EyeOff } from 'lucide-react';
 import FileUpload from '../components/FileUpload';
 import JobOffer from '../components/JobOffer';
 import Instructions from '../components/Instructions';
@@ -253,9 +253,12 @@ const AppPage: React.FC = () => {
             transition={{ duration: 0.5 }}
           >
             <div className="bg-red-100 dark:bg-red-900/20 border border-red-300 dark:border-red-700 rounded-xl p-4">
-              <p className="text-red-700 dark:text-red-300 font-medium">
-                ❌ Error: {error}
-              </p>
+              <div className="flex items-center space-x-2">
+                <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
+                <p className="text-red-700 dark:text-red-300 font-medium">
+                  Error: {error}
+                </p>
+              </div>
             </div>
           </motion.div>
         )}
@@ -321,15 +324,19 @@ const AppPage: React.FC = () => {
             transition={{ duration: 0.5, delay: 0.3 }}
           >
             <div className="bg-white dark:bg-sunglo-800 rounded-xl p-6 shadow-lg border dark:border-sunglo-700 border-sunglo-200">
-              <h3 className="text-xl font-semibold text-sunglo-800 dark:text-sunglo-100 mb-4">
-                📊 Análisis Completado - Revisa y Confirma
-              </h3>
+              <div className="flex items-center space-x-2 mb-4">
+                <BarChart3 className="w-6 h-6 text-sunglo-600 dark:text-sunglo-400" />
+                <h3 className="text-xl font-semibold text-sunglo-800 dark:text-sunglo-100">
+                  Análisis Completado - Revisa y Confirma
+                </h3>
+              </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-sunglo-700 dark:text-sunglo-300 mb-2">
-                      🎯 Rol Detectado
+                    <label className="flex items-center space-x-2 text-sm font-medium text-sunglo-700 dark:text-sunglo-300 mb-2">
+                      <Target className="w-4 h-4" />
+                      <span>Rol Detectado</span>
                     </label>
                     <div className="bg-sunglo-50 dark:bg-sunglo-700 p-3 rounded-lg">
                       <p className="text-sunglo-800 dark:text-sunglo-200 font-medium">
@@ -339,8 +346,9 @@ const AppPage: React.FC = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-sunglo-700 dark:text-sunglo-300 mb-2">
-                      📈 Nivel de Seniority
+                    <label className="flex items-center space-x-2 text-sm font-medium text-sunglo-700 dark:text-sunglo-300 mb-2">
+                      <TrendingUp className="w-4 h-4" />
+                      <span>Nivel de Seniority</span>
                     </label>
                     <div className="bg-sunglo-50 dark:bg-sunglo-700 p-3 rounded-lg">
                       <p className="text-sunglo-800 dark:text-sunglo-200 font-medium capitalize">
@@ -350,8 +358,9 @@ const AppPage: React.FC = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-sunglo-700 dark:text-sunglo-300 mb-2">
-                      🎯 Confianza del Análisis
+                    <label className="flex items-center space-x-2 text-sm font-medium text-sunglo-700 dark:text-sunglo-300 mb-2">
+                      <Target className="w-4 h-4" />
+                      <span>Confianza del Análisis</span>
                     </label>
                     <div className="flex items-center gap-2">
                       <div className="w-full bg-sunglo-200 dark:bg-sunglo-600 rounded-full h-2">
@@ -369,8 +378,9 @@ const AppPage: React.FC = () => {
                 
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-sunglo-700 dark:text-sunglo-300 mb-2">
-                      🔧 Tecnologías Detectadas
+                    <label className="flex items-center space-x-2 text-sm font-medium text-sunglo-700 dark:text-sunglo-300 mb-2">
+                      <Wrench className="w-4 h-4" />
+                      <span>Tecnologías Detectadas</span>
                     </label>
                     <div className="bg-sunglo-50 dark:bg-sunglo-700 p-3 rounded-lg">
                       <div className="flex flex-wrap gap-2">
@@ -394,8 +404,9 @@ const AppPage: React.FC = () => {
               </div>
               
               <div className="mb-6">
-                <label className="block text-sm font-medium text-sunglo-700 dark:text-sunglo-300 mb-2">
-                  🔑 Keywords ATS Detectadas (Edita si es necesario)
+                <label className="flex items-center space-x-2 text-sm font-medium text-sunglo-700 dark:text-sunglo-300 mb-2">
+                  <Key className="w-4 h-4" />
+                  <span>Keywords ATS Detectadas (Edita si es necesario)</span>
                 </label>
                 <textarea
                   value={detectedKeywords}
@@ -404,9 +415,12 @@ const AppPage: React.FC = () => {
                   rows={3}
                   placeholder="Keywords separadas por comas..."
                 />
-                <p className="text-xs text-sunglo-500 dark:text-sunglo-400 mt-1">
-                  💡 Puedes editar, agregar o quitar keywords. Sepáralas con comas.
-                </p>
+                <div className="flex items-start space-x-1 mt-1">
+                  <Lightbulb className="w-3 h-3 text-sunglo-500 dark:text-sunglo-400 mt-0.5 flex-shrink-0" />
+                  <p className="text-xs text-sunglo-500 dark:text-sunglo-400">
+                    Puedes editar, agregar o quitar keywords. Sepáralas con comas.
+                  </p>
+                </div>
               </div>
               
               <div className="flex gap-4">
@@ -414,9 +428,10 @@ const AppPage: React.FC = () => {
                   onClick={handleConfirmAndGenerate}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex-1 bg-sunglo-500 hover:bg-sunglo-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200"
+                  className="flex-1 bg-sunglo-500 hover:bg-sunglo-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center space-x-2"
                 >
-                  ✅ Confirmar y Generar CV
+                  <CheckCircle className="w-4 h-4" />
+                  <span>Confirmar y Generar CV</span>
                 </motion.button>
                 <motion.button
                   onClick={() => {
@@ -426,9 +441,10 @@ const AppPage: React.FC = () => {
                   }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-6 py-3 border border-sunglo-300 dark:border-sunglo-600 text-sunglo-700 dark:text-sunglo-300 rounded-lg font-medium hover:bg-sunglo-50 dark:hover:bg-sunglo-700 transition-colors duration-200"
+                  className="px-6 py-3 border border-sunglo-300 dark:border-sunglo-600 text-sunglo-700 dark:text-sunglo-300 rounded-lg font-medium hover:bg-sunglo-50 dark:hover:bg-sunglo-700 transition-colors duration-200 flex items-center justify-center space-x-2"
                 >
-                  ↩️ Volver a Análisis
+                  <RotateCcw className="w-4 h-4" />
+                  <span>Volver a Análisis</span>
                 </motion.button>
               </div>
             </div>
