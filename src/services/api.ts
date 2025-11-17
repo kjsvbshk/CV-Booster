@@ -34,7 +34,6 @@ class ApiService {
     // Interceptor para requests
     this.axiosInstance.interceptors.request.use(
       (config) => {
-        // Agregar token de autenticación si está disponible en cookies
         const token = CookieManager.getAccessToken();
         if (token && CookieManager.hasValidToken()) {
           config.headers.Authorization = `Bearer ${token}`;
